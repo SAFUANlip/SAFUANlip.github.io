@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Benchmarking Modern Novel View Synthesis
+                    Methods: Comparing Efficiency and Quality Across
+                    Indoor and Outdoor Scenes on Consumer-Grade
+                Hardware">
+  <meta name="keywords" content="Novel view synthesis, consumer-grade GPUs, reconstruction quality, computational efficiency, indoor, outdoor scenes, NeRF, 3D Gaussian Splatting, TensoRF, benchmarking">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Benchmarking Modern Novel View Synthesis
+                    Methods: Comparing Efficiency and Quality Across
+                    Indoor and Outdoor Scenes on Consumer-Grade
+                Hardware</title>
+
+
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+            <!-- Here has to be links to more research. -->
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Benchmarking Modern Novel View Synthesis
+                                                    Methods: Comparing Efficiency and Quality Across
+                                                    Indoor and Outdoor Scenes on Consumer-Grade
+                                                    Hardware</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://safuanlip.github.io">Safuan Iusupov</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://3zadessg.github.io">Manu Gond</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=S44_XWsAAAAJ&hl=en">Emin Zerman</a><sup>1</sup>,
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Mid Sweden University</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF -->
+              <span class="link-block">
+                <a href="pdf/2070S_ProjectSafuanNovelViews.pdf"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/SAFUANlip/RD_NeRF"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                </a>
+              </span>
+            </div>
+            
+            <!-- Dataset Links Section -->
+            <div class="publication-links" style="margin-top: 15px;">
+              <!-- SfM Dataset -->
+              <span class="link-block">
+                <a href="https://www.maths.lth.se/matematiklth/personal/calle/dataset/dataset.html"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>SfM Dataset</span>
+                </a>
+              </span>
+              
+              <!-- NeRFBK Dataset -->
+              <span class="link-block">
+                <a href="https://github.com/3DOM-FBK/NeRFBK"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>NeRFBK Dataset</span>
+                </a>
+              </span>
+              
+              <!-- LLFF Dataset -->
+              <span class="link-block">
+                <a href="https://www.kaggle.com/datasets/arenagrenade/llff-dataset-full"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>LLFF Dataset</span>
+                </a>
+              </span>
+              
+              <!-- NeRF-360 Dataset -->
+              <span class="link-block">
+                <a href="https://drive.google.com/drive/folders/1cK3UDIJqKAAm7zyrxRYVFJ0BRMgrwhh4"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>NeRF-360 Dataset</span>
+                </a>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Recent progress in novel view synthesis has pro-
+            duced a wide variety of implicit, explicit, and hybrid 3D rep-
+            resentations, yet it remains unclear how these methods perform
+            under realistic hardware constraints or across different types
+            of real-world scenes. Existing benchmarks typically rely on
+            high-end GPUs and focus on indoor or synthetic environments,
+            leaving open questions about practical deployment on consumer-
+            grade hardware. In this work, we systematically evaluate four
+            representative NVS models: 3D Gaussian Splatting, Nerfacto,
+            Instant-NGP, and TensoRF across a diverse set of real-world
+            scenes categorized as indoor and outdoor. Using a unified train-
+            ing and evaluation pipeline, we analyze reconstruction quality
+            and computational efficiency on two consumer-grade GPUs
+            (GTX 1080Ti and RTX 2070S). A statistical analysis shows that
+            scene type (indoor vs. outdoor) has no effect on reconstruction
+            quality for any of the evaluated models. However, scene type
+            does influence computational efficiency for Nerfacto, TensoRF,
+            and 3D Gaussian Splatting. When comparing methods directly,
+            3D Gaussian Splatting delivers the highest reconstruction quality.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full">
+        <h2 class="title is-2">Results</h2>
+        
+        <div class="content is-medium">
+          <p>
+            Figures 1 and 2 summarize the distribution of all metrics
+            across indoor and outdoor scenes for each model on setups 1
+            and 2. A MANOVA using Pillai’s trace showed no significant
+            main effect of scene type on the multivariate set of metrics,
+            but revealed a significant scene type × model interaction, indi-
+            cating that the influence of type differs across methods.
+          </p>
+          
+          <p>
+            To localize this interaction, we compared indoor vs. out-
+            door scenes within each model using the Brunner–Munzel
+            test with Benjamini–Hochberg correction. For both hardware
+            setups, scene type showed no significant effect on the three
+            reconstruction metrics (PSNR, SSIM, LPIPS) for any model.
+          </p>
+          
+          <p>
+            For computational efficiency, scene type affected perfor-
+            mance only in specific cases:
+          </p>
+          
+          <ul>
+            <li><strong>TensoRF</strong>: significantly longer training times on indoor
+                scenes on both the 1 and 2 setups.</li>
+            <li><strong>Nerfacto</strong>: significantly longer training times on indoor
+                scenes on the 1 setup.</li>
+            <li><strong>Splatfacto</strong>: significantly higher rays-per-second through-
+                put on outdoor scenes on the 2 setup.</li>
+          </ul>
+        </div>
+        
+        <!-- Альтернативный вариант с более крупными изображениями -->
+        <div class="columns is-centered is-vcentered" style="margin-top: 40px;">
+          <div class="column is-half">
+            <div class="card">
+              <div class="card-image">
+                <figure class="image">
+                  <img src="./static/images/in_vs_out_1080Ti.jpeg" alt="Distribution of all metrics across outdoor and indoor scenes for each model on the 1080Ti setup">
+                </figure>
+              </div>
+              <div class="card-content">
+                <div class="content has-text-centered">
+                  <p class="subtitle is-5"><strong>Figure 1:</strong> Distribution of all metrics across outdoor and indoor scenes for each model on the 1080Ti setup.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="column is-half">
+            <div class="card">
+              <div class="card-image">
+                <figure class="image">
+                  <img src="./static/images/in_vs_out_2070S.jpeg" alt="Distribution of all metrics across outdoor and indoor scenes for each model on the 2070S setup">
+                </figure>
+              </div>
+              <div class="card-content">
+                <div class="content has-text-centered">
+                  <p class="subtitle is-5"><strong>Figure 2:</strong> Distribution of all metrics across outdoor and indoor scenes for each model on the 2070S setup.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Optional: Additional information or captions -->
+        <div class="content is-small has-text-centered" style="margin-top: 20px;">
+          <p>
+            <em>Note: Setup 1 refers to 1080Ti hardware, Setup 2 refers to 2070S hardware.</em>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-light">
+  <div class="hero-body">
+    <div class="container">
+      <!-- Cyprus -->
+      <div class="dataset-section">
+        <h2 class="title is-3 has-text-centered">Cyprus</h2>
+        <div class="columns is-centered is-vcentered">
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Instant-NGP</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/cyprus/cyprus_instant-ngp_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Splatfacto</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/cyprus/cyprus_splatfacto_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Nerfacto</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/cyprus/cyprus_nerfacto_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">TensorF</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/cyprus/cyprus_tensorf_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Bottle -->
+      <div class="dataset-section" style="margin-top: 50px;">
+        <h2 class="title is-3 has-text-centered">Bottle</h2>
+        <div class="columns is-centered is-vcentered">
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Instant-NGP</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/bottle/bottle_instant-ngp_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Splatfacto</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/bottle/bottle_splatfacto_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Nerfacto</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/bottle/bottle_nerfacto_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">TensorF</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/bottle/bottle_tensorf_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Doge Palace -->
+      <div class="dataset-section" style="margin-top: 50px;">
+        <h2 class="title is-3 has-text-centered">Doge Palace</h2>
+        <div class="columns is-centered is-vcentered">
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Instant-NGP</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/doge_palace/doge_palace_instant-ngp_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Splatfacto</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/doge_palace/doge_palace_splatfacto_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Nerfacto</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/doge_palace/doge_palace_nerfacto_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">TensorF</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/doge_palace/doge_palace_tensorf_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Kazan Cathedral -->
+      <div class="dataset-section" style="margin-top: 50px;">
+        <h2 class="title is-3 has-text-centered">Kazan Cathedral</h2>
+        <div class="columns is-centered is-vcentered">
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Instant-NGP</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/Kazan_cathedral/Kazan_cathedral_instant-ngp_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Splatfacto</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/Kazan_cathedral/Kazan_cathedral_splatfacto_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Nerfacto</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/Kazan_cathedral/Kazan_cathedral_nerfacto_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">TensorF</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/Kazan_cathedral/Kazan_cathedral_tensorf_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Metopa -->
+      <div class="dataset-section" style="margin-top: 50px;">
+        <h2 class="title is-3 has-text-centered">Metopa</h2>
+        <div class="columns is-centered is-vcentered">
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Instant-NGP</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/metopa/metopa_instant-ngp_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Splatfacto</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/metopa/metopa_splatfacto_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Nerfacto</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/metopa/metopa_nerfacto_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">TensorF</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/metopa/metopa_tensorf_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Pinecone -->
+      <div class="dataset-section" style="margin-top: 50px;">
+        <h2 class="title is-3 has-text-centered">Pinecone</h2>
+        <div class="columns is-centered is-vcentered">
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Instant-NGP</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/pinecone/pinecone_instant-ngp_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Splatfacto</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/pinecone/pinecone_splatfacto_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Nerfacto</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/pinecone/pinecone_nerfacto_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">TensorF</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/pinecone/pinecone_tensorf_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Plaza De Armas -->
+      <div class="dataset-section" style="margin-top: 50px;">
+        <h2 class="title is-3 has-text-centered">Plaza De Armas</h2>
+        <div class="columns is-centered is-vcentered">
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Instant-NGP</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/plaza_de_armas/plaza_de_armas_instant-ngp_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Splatfacto</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/plaza_de_armas/plaza_de_armas_splatfacto_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Nerfacto</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/plaza_de_armas/plaza_de_armas_nerfacto_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">TensorF</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/plaza_de_armas/plaza_de_armas_tensorf_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Pumpkin -->
+      <div class="dataset-section" style="margin-top: 50px;">
+        <h2 class="title is-3 has-text-centered">Pumpkin</h2>
+        <div class="columns is-centered is-vcentered">
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Instant-NGP</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/pumpkin/pumpkin_instant-ngp_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Splatfacto</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/pumpkin/pumpkin_splatfacto_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Nerfacto</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/pumpkin/pumpkin_nerfacto_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">TensorF</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/pumpkin/pumpkin_tensorf_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Round Church -->
+      <div class="dataset-section" style="margin-top: 50px;">
+        <h2 class="title is-3 has-text-centered">Round Church</h2>
+        <div class="columns is-centered is-vcentered">
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Instant-NGP</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/round_church/round_church_instant-ngp_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Splatfacto</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/round_church/round_church_splatfacto_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Nerfacto</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/round_church/round_church_nerfacto_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">TensorF</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/round_church/round_church_tensorf_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Sri Veeramakaliamman -->
+      <div class="dataset-section" style="margin-top: 50px;">
+        <h2 class="title is-3 has-text-centered">Sri Veeramakaliamman</h2>
+        <div class="columns is-centered is-vcentered">
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Instant-NGP</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/Sri_Veeramakaliamman/Sri_Veeramakaliamman_instant-ngp_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Splatfacto</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/Sri_Veeramakaliamman/Sri_Veeramakaliamman_splatfacto_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Nerfacto</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/Sri_Veeramakaliamman/Sri_Veeramakaliamman_nerfacto_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">TensorF</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/Sri_Veeramakaliamman/Sri_Veeramakaliamman_tensorf_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Vasedeck -->
+      <div class="dataset-section" style="margin-top: 50px;">
+        <h2 class="title is-3 has-text-centered">Vasedeck</h2>
+        <div class="columns is-centered is-vcentered">
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Instant-NGP</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/vasedeck/vasedeck_instant-ngp_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Splatfacto</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/vasedeck/vasedeck_splatfacto_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">Nerfacto</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/vasedeck/vasedeck_nerfacto_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="column">
+            <div class="video-card">
+              <h3 class="title is-5 has-text-centered">TensorF</h3>
+              <video poster="" autoplay controls muted loop playsinline height="100%" width="100%">
+                <source src="./static/renders/vasedeck/vasedeck_tensorf_2070S.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@inproceedings{...,
+  title={Benchmarking Modern Novel View Synthesis Methods: Comparing Efficiency and Quality Across Indoor and Outdoor Scenes on Consumer-Grade Hardware},
+  author={Safuan Iusupov, Manu Gond, Emin Zerman},
+  booktitle={2025 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  pages={},
+  year={2025},
+  organization={}
+}</code></pre>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link"
+         href="./pdf/2070S_ProjectSafuanNovelViews.pdf" class="external-link" disabled>
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="https://github.com/SAFUANlip/RD_NeRF" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            Original template been taken from authors of Nerfies. Link to their: <a
+              href="https://github.com/nerfies/nerfies.github.io">source code</a>.
+          </p>
+          <p>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
